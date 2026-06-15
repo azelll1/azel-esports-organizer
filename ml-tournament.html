@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MLTourney | Info Turnamen Mobile Legends</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #060810;
+      --bg-card: #0d1117;
+      --bg-panel: #111827;
+      --accent-blue: #00c3ff;
+      --accent-gold: #f5c518;
+      --accent-purple: #7c3aed;
+      --accent-red: #ef4444;
+      --text-primary: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --border: rgba(0,195,255,0.12);
+      --glow: 0 0 20px rgba(0,195,255,0.25);
+      --gold-glow: 0 0 16px rgba(245,197,24,0.3);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6,8,16,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .nav-logo .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      letter-spacing: 1px;
+    }
+    .logo-text span { color: var(--accent-blue); }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 0.25rem;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+      position: relative;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent-blue);
+      background: rgba(0,195,255,0.08);
+    }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 14px; right: 14px;
+      height: 2px;
+      background: var(--accent-blue);
+      border-radius: 2px;
+    }
+
+    .nav-dropdown { position: relative; }
+    .nav-dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: all 0.2s;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 7px 12px;
+      border-radius: 6px;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+    .dropdown-menu a:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+
+    .nav-btn {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff !important;
+      padding: 8px 18px !important;
+      border-radius: 8px !important;
+      font-weight: 600 !important;
+      font-size: 0.82rem !important;
+    }
+    .nav-btn:hover { filter: brightness(1.1); background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)) !important; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 4rem 2rem 3rem;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,195,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 10% 80%, rgba(124,58,237,0.1) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,195,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,195,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+    }
+    .hero-content { position: relative; max-width: 700px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245,197,24,0.1);
+      border: 1px solid rgba(245,197,24,0.3);
+      color: var(--accent-gold);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.5px;
+    }
+    .hero-badge::before { content: '⚡'; }
+
+    .hero h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+    .hero h1 span { color: var(--accent-blue); }
+    .hero p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      line-height: 1.65;
+      max-width: 520px;
+      margin-bottom: 2rem;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), #0070b8);
+      color: #fff;
+      border: none;
+      padding: 11px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--glow);
+    }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 11px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 0 3rem;
+      position: relative;
+    }
+    .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 10%; bottom: 10%;
+      width: 1px;
+      background: var(--border);
+    }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* MAIN LAYOUT */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+
+    .layout { display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: start; }
+
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-right: 4px;
+    }
+    .filter-btn {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+    .filter-btn.active {
+      background: rgba(0,195,255,0.12);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 18px;
+      background: var(--accent-blue);
+      border-radius: 2px;
+    }
+    .see-all {
+      font-size: 0.8rem;
+      color: var(--accent-blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .see-all:hover { text-decoration: underline; }
+
+    /* DATE GROUP */
+    .date-group { margin-bottom: 2rem; }
+    .date-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.85rem;
+    }
+    .date-label time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .date-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* TOURNAMENT CARD */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(0,195,255,0.3);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4), var(--glow);
+      transform: translateX(3px);
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card-thumb {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--bg-panel);
+    }
+    .card-thumb-placeholder {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1a2035, #0d1930);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+
+    .card-body { flex: 1; min-width: 0; }
+    .card-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .meta-chip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+    .meta-chip svg { width: 12px; height: 12px; }
+
+    .card-badge {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.4px;
+      flex-shrink: 0;
+    }
+    .badge-open {
+      background: rgba(34,197,94,0.12);
+      color: #22c55e;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+    .badge-closed {
+      background: rgba(239,68,68,0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239,68,68,0.2);
+    }
+    .badge-upcoming {
+      background: rgba(245,197,24,0.1);
+      color: var(--accent-gold);
+      border: 1px solid rgba(245,197,24,0.25);
+    }
+
+    .card-arrow {
+      color: var(--text-muted);
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+    .card:hover .card-arrow { color: var(--accent-blue); }
+
+    /* TAGS */
+    .card-tags {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 0.66rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.04);
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .widget-header {
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-primary);
+    }
+    .widget-header .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      box-shadow: 0 0 6px var(--accent-blue);
+    }
+    .widget-body { padding: 1rem 1.1rem; }
+
+    /* SEARCH */
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      flex: 1;
+    }
+    .search-box input::placeholder { color: var(--text-muted); }
+    .search-icon { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* GAME LIST */
+    .game-list { list-style: none; }
+    .game-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .game-item:last-child { border-bottom: none; }
+    .game-item:hover .game-name { color: var(--accent-blue); }
+    .game-name {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .game-icon { font-size: 0.85rem; }
+    .game-count {
+      font-size: 0.72rem;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+    .game-item.active .game-name { color: var(--accent-blue); font-weight: 600; }
+    .game-item.active .game-count { background: rgba(0,195,255,0.15); color: var(--accent-blue); }
+
+    /* HOT TOURNAMENT */
+    .hot-card {
+      background: linear-gradient(135deg, #0a1628, #0d1a3a);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 10px;
+      border: 1px solid rgba(0,195,255,0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .hot-card:hover { border-color: rgba(0,195,255,0.3); }
+    .hot-card:last-child { margin-bottom: 0; }
+    .hot-card-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+      color: var(--text-primary);
+    }
+    .hot-card-info {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 10px;
+    }
+    .hot-card-fire {
+      float: right;
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+      background: rgba(245,197,24,0.1);
+      border: 1px solid rgba(245,197,24,0.2);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 2rem;
+    }
+    .page-btn {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .page-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+    .page-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #000;
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      background: var(--bg-card);
+    }
+    footer a { color: var(--accent-blue); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .stat-item { padding: 0 1.5rem; }
+      .stats-bar { gap: 0; overflow-x: auto; }
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">🎮</div>
+    <span class="logo-text">ML<span>Tourney</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Home</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Tournament ▾</a>
+      <div class="dropdown-menu">
+        <a href="#">Mobile Legends</a>
+        <a href="#">Free Fire</a>
+        <a href="#">PUBG Mobile</a>
+        <a href="#">Valorant</a>
+        <a href="#">Dota 2</a>
+        <a href="#">Semua Game</a>
+      </div>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Team Profile ▾</a>
+      <div class="dropdown-menu">
+        <a href="#">Mobile Legends</a>
+        <a href="#">Free Fire</a>
+        <a href="#">CS2</a>
+      </div>
+    </li>
+    <li><a href="#">Results</a></li>
+    <li><a href="#">Guide</a></li>
+    <li><a href="#">Latest News</a></li>
+    <li><a href="#" class="nav-btn">Daftar Turnamen</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Info Turnamen Terlengkap 2026</div>
+    <h1>Turnamen<br /><span>Mobile Legends</span><br />Terbaru</h1>
+    <p>Temukan turnamen MLBB dari level amatir hingga profesional. Update setiap hari, dari lokal hingga internasional.</p>
+    <div class="hero-actions">
+      <a href="#tournaments" class="btn-primary">🏆 Lihat Turnamen</a>
+      <a href="#" class="btn-secondary">📋 Cara Daftar</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">350+</span>
+    <span class="stat-label">Turnamen ML</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">6.2K</span>
+    <span class="stat-label">Total Listing</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">18</span>
+    <span class="stat-label">Turnamen Aktif</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">35+</span>
+    <span class="stat-label">Game Didukung</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container" id="tournaments">
+  <div class="layout">
+
+    <!-- LEFT: TOURNAMENT LIST -->
+    <div class="main-col">
+      <div class="section-header">
+        <h2 class="section-title">Daftar Turnamen</h2>
+        <a href="#" class="see-all">Lihat Semua →</a>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-btn active" onclick="filterCards(this, 'all')">Semua</button>
+        <button class="filter-btn" onclick="filterCards(this, 'open')">Pendaftaran Buka</button>
+        <button class="filter-btn" onclick="filterCards(this, 'upcoming')">Segera Mulai</button>
+        <button class="filter-btn" onclick="filterCards(this, 'closed')">Selesai</button>
+      </div>
+
+      <!-- Date Group: Juni 2026 -->
+      <div class="date-group">
+        <div class="date-label"><time>14 Juni 2026</time></div>
+        <a href="#" class="card" data-status="open">
+          <div class="card-thumb-placeholder">🏆</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – MUFFIN SEASON 65</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 17 Juni 2026</span>
+              <span class="meta-chip">⏰ Tutup: 17 Juni 2026</span>
+              <span class="card-badge badge-open">Pendaftaran Buka</span>
+            </div>
+            <div class="card-tags"><span class="tag">esports</span><span class="tag">mlbb</span><span class="tag">tourney</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- Date Group: 10 Juni -->
+      <div class="date-group">
+        <div class="date-label"><time>10 Juni 2026</time></div>
+        <a href="#" class="card" data-status="upcoming">
+          <div class="card-thumb-placeholder">⚔️</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – MUFFIN SEASON 65</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 13 Juni 2026</span>
+              <span class="meta-chip">⏰ Tutup: 13 Juni 2026</span>
+              <span class="card-badge badge-upcoming">Segera Mulai</span>
+            </div>
+            <div class="card-tags"><span class="tag">esports</span><span class="tag">mlbb</span><span class="tag">tourney</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- Date Group: 7 Juni -->
+      <div class="date-group">
+        <div class="date-label"><time>07 Juni 2026</time></div>
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">🎯</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – MUFFIN SEASON 65</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 10 Juni 2026</span>
+              <span class="meta-chip">⏰ Tutup: 10 Juni 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">esports</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- 31 Mei -->
+      <div class="date-group">
+        <div class="date-label"><time>31 Mei 2026</time></div>
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">🌟</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – Sunday Clash June 2026</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 5 Juni 2026</span>
+              <span class="meta-chip">⏰ Tutup: 4 Juni 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">esports</span><span class="tag">sunday clash</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- 10 Mei -->
+      <div class="date-group">
+        <div class="date-label"><time>10 Mei 2026</time></div>
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">🔥</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – WATCH PARTY NAVI</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 17 Mei 2026</span>
+              <span class="meta-chip">⏰ Tutup: 16 Mei 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">watch party</span><span class="tag">navi</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">🎪</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – WARUNG LOKA X EVOS WATCH PARTY</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 16 Mei 2026</span>
+              <span class="meta-chip">⏰ Tutup: 14 Mei 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">evos</span><span class="tag">watch party</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">☕</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – MAV CAFE & EATERY</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 16 Mei 2026</span>
+              <span class="meta-chip">⏰ Tutup: 14 Mei 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">cafe</span><span class="tag">lokal</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- 6 Mei -->
+      <div class="date-group">
+        <div class="date-label"><time>06 Mei 2026</time></div>
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">⚡</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – BCY X ELYSIUM</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 10 Mei 2026</span>
+              <span class="meta-chip">⏰ Tutup: 9 Mei 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">bcy</span><span class="tag">elysium</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+
+        <a href="#" class="card" data-status="closed">
+          <div class="card-thumb-placeholder">🐂</div>
+          <div class="card-body">
+            <div class="card-title">Turnamen Mobile Legends – TAURUS CUP</div>
+            <div class="card-meta">
+              <span class="meta-chip">📅 Mulai: 11 Mei 2026</span>
+              <span class="meta-chip">⏰ Tutup: 9 Mei 2026</span>
+              <span class="card-badge badge-closed">Pendaftaran Tutup</span>
+            </div>
+            <div class="card-tags"><span class="tag">taurus cup</span><span class="tag">mlbb</span></div>
+          </div>
+          <span class="card-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <a href="#" class="page-btn active">1</a>
+        <a href="#" class="page-btn">2</a>
+        <a href="#" class="page-btn">3</a>
+        <a href="#" class="page-btn">4</a>
+        <a href="#" class="page-btn">5</a>
+        <span style="color:var(--text-muted);font-size:.85rem">…</span>
+        <a href="#" class="page-btn">348</a>
+        <a href="#" class="page-btn">›</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Search -->
+      <div class="widget">
+        <div class="widget-header"><span class="dot"></span> Cari Turnamen</div>
+        <div class="widget-body">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Nama turnamen..." />
+          </div>
+        </div>
+      </div>
+
+      <!-- Hot Tournaments -->
+      <div class="widget">
+        <div class="widget-header"><span class="dot"></span> 🔥 Turnamen Populer</div>
+        <div class="widget-body">
+          <div class="hot-card">
+            <span class="hot-card-fire">🔥 Hot</span>
+            <div class="hot-card-title">MUFFIN SEASON 65</div>
+            <div class="hot-card-info"><span>📅 17 Jun 2026</span><span>Buka</span></div>
+          </div>
+          <div class="hot-card">
+            <span class="hot-card-fire">⭐ Top</span>
+            <div class="hot-card-title">Sunday Clash June 2026</div>
+            <div class="hot-card-info"><span>📅 5 Jun 2026</span><span>Selesai</span></div>
+          </div>
+          <div class="hot-card">
+            <div class="hot-card-title">BCY X ELYSIUM</div>
+            <div class="hot-card-info"><span>📅 10 Mei 2026</span><span>Selesai</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Games List -->
+      <div class="widget">
+        <div class="widget-header"><span class="dot"></span> Game Lainnya</div>
+        <div class="widget-body">
+          <ul class="game-list">
+            <li class="game-item active">
+              <span class="game-name"><span class="game-icon">⚔️</span> Mobile Legends</span>
+              <span class="game-count">348</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">🔫</span> Free Fire</span>
+              <span class="game-count">210</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">🪖</span> PUBG Mobile</span>
+              <span class="game-count">187</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">🎯</span> Valorant</span>
+              <span class="game-count">145</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">🗡️</span> Dota 2</span>
+              <span class="game-count">98</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">💎</span> Brawl Stars</span>
+              <span class="game-count">76</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">🏆</span> Clash Royale</span>
+              <span class="game-count">64</span>
+            </li>
+            <li class="game-item">
+              <span class="game-name"><span class="game-icon">🎮</span> Lainnya…</span>
+              <span class="game-count">30+</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="widget">
+        <div class="widget-header"><span class="dot"></span> Tag Populer</div>
+        <div class="widget-body">
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span class="filter-btn">esports</span>
+            <span class="filter-btn">mlbb</span>
+            <span class="filter-btn">infotourney</span>
+            <span class="filter-btn">tourney</span>
+            <span class="filter-btn">amatir</span>
+            <span class="filter-btn">profesional</span>
+            <span class="filter-btn">2026</span>
+            <span class="filter-btn">juni</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <a href="#">MLTourney</a>. Info Turnamen Mobile Legends Terlengkap & Terpercaya.</p>
+</footer>
+
+<script>
+  function filterCards(btn, status) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      if (status === 'all' || card.dataset.status === status) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
